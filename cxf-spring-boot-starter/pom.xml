@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>de.codecentric</groupId>
+		<artifactId>cxf-spring-boot-starter-reactor</artifactId>
+		<version>2.5.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>cxf-spring-boot-starter</artifactId>
+	<description>Boot starter for SOAP-Webservices with Apache CXF using JAX-WS &amp; JAXB with Annotations only</description>
+	<packaging>jar</packaging>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<!-- Project dependencies -->
+		<spring.boot.version>2.5.12</spring.boot.version>
+		<cxf-spring-boot-starter-maven-plugin.version>2.3.0.RELEASE</cxf-spring-boot-starter-maven-plugin.version>
+		<cxf.version>3.5.3</cxf.version>
+		<jakarta.activation.version>2.0.1</jakarta.activation.version>
+
+		<fluent-hc.version>4.5.13</fluent-hc.version>
+		<camunda.version>7.17.0</camunda.version>
+		<logstash-logback-encoder.version>7.2</logstash-logback-encoder.version>
+		<commons-io.version>2.11.0</commons-io.version>
+		<spring.cloud.sleuth.version>3.0.4</spring.cloud.sleuth.version>
+		<system-stubs-jupiter.version>2.0.1</system-stubs-jupiter.version>
+
+		<!-- Analysis Tools for CI -->
+		<build-plugin.jacoco.version>0.8.8</build-plugin.jacoco.version>
+		<build-plugin.coveralls.version>4.3.0</build-plugin.coveralls.version>
+
+		<!-- Exclude generated JAXB-Java-Classes from Sonar-Analysis -->
+		<sonar.exclusions>**/target/generated-sources/wsdlimport/**</sonar.exclusions>
+	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring.boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-sleuth</artifactId>
+				<version>${spring.cloud.sleuth.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+        </dependencies>
+	</dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<!-- Distributed tracing - http://cloud.spring.io/spring-cloud-sleuth/ -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-sleuth</artifactId>
+		</dependency>
+
+		<!-- Apache CXF -->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+		<!-- Apache CXF from Java 11 on - see https://stackoverflow.com/questions/55476331/tomcat8-5-and-openjdk11-noclassdeffounderror-could-not-initialize-class-org-apa -->
+		<dependency>
+			<groupId>com.sun.activation</groupId>
+			<artifactId>jakarta.activation</artifactId>
+			<version>${jakarta.activation.version}</version>
+		</dependency>
+
+		<!-- camunda DMN Engine -->
+		<dependency>
+			<groupId>org.camunda.bpm.dmn</groupId>
+			<artifactId>camunda-engine-dmn-bom</artifactId>
+			<version>${camunda.version}</version>
+			<type>pom</type>
+			<scope>import</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.camunda.bpm.dmn</groupId>
+			<artifactId>camunda-engine-dmn</artifactId>
+			<version>${camunda.version}</version>
+		</dependency>
+		<!-- Logging with ELK -->
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>${logstash-logback-encoder.version}</version>
+		</dependency>
+		<!-- Fileconverting for PDF-reading -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
+		</dependency>
+		<!-- SoapRawClient -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>fluent-hc</artifactId>
+			<version>${fluent-hc.version}</version>
+		</dependency>
+
+        <!-- Autodetection of Endpoints -->
+		<dependency>
+			<groupId>de.codecentric</groupId>
+			<artifactId>cxf-spring-boot-starter-maven-plugin</artifactId>
+			<version>${cxf-spring-boot-starter-maven-plugin.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+        <!-- Test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>uk.org.webcompere</groupId>
+			<artifactId>system-stubs-jupiter</artifactId>
+			<version>${system-stubs-jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring.boot.version}</version>
+			</plugin>
+			<!-- With JUnit 5 explicitely needed to let our tests run with Maven & as there seems to be a transitively
+			 added older surefire-plugin, that doesnt support JUnit 5 as described in https://stackoverflow.com/a/49019437/4964553 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+			</plugin>
+			<!-- Used for testing purposes. -->
+			<plugin>
+				<groupId>de.codecentric</groupId>
+				<artifactId>cxf-spring-boot-starter-maven-plugin</artifactId>
+				<version>${cxf-spring-boot-starter-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${build-plugin.jacoco.version}</version>
+				<executions>
+					<!-- Prepares the property pointing to the JaCoCo
+                    runtime agent which is passed as VM argument when Maven the Surefire plugin
+                    is executed. -->
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<!-- Ensures that the code coverage report for
+                    unit tests is created after unit tests have been run. -->
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eluder.coveralls</groupId>
+				<artifactId>coveralls-maven-plugin</artifactId>
+				<version>${build-plugin.coveralls.version}</version>
+			</plugin>
+		</plugins>
+	</build>
+</project>

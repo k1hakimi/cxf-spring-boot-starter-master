@@ -1,0 +1,11 @@
+docker:
+  image: "jonashackt/rultor"
+decrypt:
+  settings.xml: "repo/settings.xml.asc"
+  pubring.gpg: "repo/pubring.gpg.asc"
+  secring.gpg: "repo/secring.gpg.asc"
+release:
+  script: |
+    mvn versions:set "-DnewVersion=${tag}"
+    git commit -am "${tag}"
+    mvn clean deploy -P central-deploy --settings /home/r/settings.xml -P cxf-spring-boot-starter -DskipTests=true
